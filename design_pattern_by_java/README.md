@@ -24,3 +24,11 @@
 ひとつの Aggregateに対して複数の Iteratorを持たせることができる。
 - この構成にすることで、for/whileの書き方が Aggregateの実装に依存しない  
 Aggregateの変更に強くなる。
+
+### Adapter
+
+- 間を取り持つもの
+- Wrapperパターンとよばれることも
+- 2種類ある
+  - 継承を使ったもの
+  - 委譲を使ったもの
