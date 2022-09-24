@@ -302,3 +302,14 @@ public class Main {
     }
 }
 ```
+
+### Prototypeのまとめ
+
+- 登場人物
+  - Prototype: 既存のインスタンスをコピーするための処理を定めるインタフェース
+  - ConcretePrototype: Prototypeを具体的に実装するもの
+  - Client: ConcretePrototypeを使うもの
+- どんないいことがある？
+  - 純粋にインスタンスのコピーができる
+  - クラス名を指定せずインスタンスを生成する手段がある  
+  クラス名による束縛・密結合を避けることができる。
