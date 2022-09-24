@@ -8,11 +8,11 @@
 | 著者     | 結城浩                             |
 | 発行日   | 2013.09.10                         |
 
-## Memo
+## Foreword
 
 - デザインパターンはクラスの再利用化を促進するもの
 
-### Iterator
+## Iterator
 
 - 要素の集合をひとつひとつ簡単に取り出せるパターン
 - 登場人物
@@ -25,7 +25,7 @@
 - この構成にすることで、for/whileの書き方が Aggregateの実装に依存しない  
 Aggregateの変更に強くなる。
 
-### Adapter
+## Adapter
 
 - 間を取り持つもの  
 すでに提供されているものを必要なものに変換する。
@@ -34,7 +34,7 @@ Aggregateの変更に強くなる。
   - 継承を使ったもの
   - 委譲を使ったもの
 
-#### 継承を使ったもの
+### 継承を使ったもの
 
 実装のモチベーション、流れは以下の通り。
 
@@ -44,7 +44,7 @@ Aggregateの変更に強くなる。
 4. そこで、クラスAを継承しつつインタフェースBを実装した新たなクラスCを定義する
 5. これで、既存の処理を流用しつつ好きな使い方ができる
 
-#### 委譲を使ったもの
+### 委譲を使ったもの
 
 継承を使ったものでは、自分の欲しい処理がインタフェースBで定義されていた。  
 しかし、委譲を使ったものではそれが抽象クラスBとして定義されている。  
@@ -58,7 +58,7 @@ Aggregateの変更に強くなる。
 4. そこで、クラスBを継承しつつ中ではインスタンスAの処理を呼び出すだけのクラスを定義し、それをクラスCとする
 5. これで、既存の処理を流用しつつ好きな使い方ができる
 
-#### Adapterのまとめ
+### Adapterのまとめ
 
 - 登場人物
   - Target: いま必要なメソッドを定めるもの
@@ -72,7 +72,7 @@ Aggregateの変更に強くなる。
   - 互換性をもたせるのに有用
   - 動くコードがなくとも入出力の仕様だけで実装を進めることができる
 
-### Template Method
+## Template Method
 - Abstractによって処理の流れ (テンプレートメソッド) だけを定義し、詳細の実装はサブクラスに任せる
 - 登場人物
   - AbstractClass: 抽象メソッドを宣言し、テンプレートを表す  
@@ -82,7 +82,7 @@ Aggregateの変更に強くなる。
 - どんないいことがある？
   - 処理の概念を統一できる
 
-#### サンプルコード
+### サンプルコード
 
 ```java
 public abstract class AbstractDisplay {
@@ -113,7 +113,7 @@ public class CharDisplay extends AbstractDisplay {
 }
 ```
 
-### Factory Method
+## Factory Method
 
 - Template Methodと似ている
 - インスタンス生成の方法を統一しつつ、詳細な実装はサブクラスに委ねる
@@ -123,7 +123,7 @@ public class CharDisplay extends AbstractDisplay {
   - ConcreteProduct: Productの中身を実装するもの
   - ConcreteCreator: Creatorの中身を実装するもの
 
-#### サンプルコード
+### サンプルコード
 
 フレームワーク側:
 
@@ -176,8 +176,140 @@ public class IDCardFactory extends Factory {
 }
 ```
 
-#### Factory Methodのまとめ
+### Factory Methodのまとめ
 
 - どんないいことがある？
   - どんなサブクラスを定義しようとも、Productを作るときの書き方がクラス名に依存しない  
   Productの生成は `createProduct()` に統一されており、この部分が変更に強くなる。
+
+## Prototype
+
+- 既存のインスタンスをコピーして新しいインスタンスを作る
+
+### サンプルコード
+
+フレームワーク側:
+
+```java
+import java.util.*;
+
+public interface Product extends Cloneable {
+    public abstract void use(String s);
+    public abstract Product createClone();
+}
+
+public class Manager {
+    private HashMap showcase = new HashMap();
+    public void register(String name, Product proto) {
+        showcase.put(name, proto);
+    }
+    public Product create(String protoname) {
+        product p = (Product)showcase.get(protoname);
+        return p.createClone();
+    }
+}
+```
+
+フレームワークを利用する側:
+
+- MessageBox: 文字列 (s) を特定の文字 (decochar) で囲って出力する
+- UnderlinePen: 文字列 (s) の下に特定の文字 (ulchar) を付けて出力する
+
+```java
+public class MessageBox implements Product {
+    private char decochar;
+    public MessageBox(char decochar) {
+        this.decochar = decochar;
+    }
+    public void use(String s) {
+        int length = s.getBytes().length;
+        for (int i = 0; i < length + 4; i++) {
+            System.out.print(decochar);
+        }
+        System.out.println("");
+        System.out.println(decochar + " " + s + " " + decochar);
+        for (int i = 0; i < length + 4; i++) {
+            System.out.print(decochar);
+        }
+        System.out.println("");
+    }
+    public Product createClone() {
+        Product p = null;
+        try {
+            p = (Product)clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStarckTrace();
+        }
+        return p;
+    }
+}
+
+public class UnderlinePen implements Product {
+    private char ulchar;
+    public UnderlinePen(char ulchar) {
+        this.ulchar = ulchar;
+    }
+    public void use(String s) {
+        int length = s.getBytes().length;
+        System.out.println("\"" + s + "\"");
+        System.out.print(" ");
+        for (int i = 0; i < length; i++) {
+            System.out.print(ulchar);
+        }
+        System.out.println("");
+    }
+    public Product createClone() {
+        Product p = null;
+        try {
+            p = (Product)clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return p;
+    }
+}
+```
+
+Mainクラス:
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        Manager manager = new Manager();
+        UnderlinePen upen = new UnderlinePen('~');
+        MessageBox mbox = new MessageBox('*');
+        MessageBox sbox = new MessageBox('/');
+        manager.register("strong message", upen);
+        manager.register("warning box", mbox);
+        manager.register("slash box", sbox);
+
+        Product p1 = manager.create("strong message");
+        p1.use("Hello, world.");
+        // "Hello, world."
+        //  ~~~~~~~~~~~~~
+
+        Product p2 = manager.create("warning box");
+        p2.use("Hello, world.");
+        // *****************
+        // * Hello, world. *
+        // *****************
+
+        Product p3 = manager.create("slash box");
+        p3.use("Hello, world.");
+        // /////////////////
+        // / Hello, world. /
+        // /////////////////
+    }
+}
+```
+
+### Prototypeのまとめ
+
+- 登場人物
+  - Prototype: 既存のインスタンスをコピーするための処理を定めるインタフェース
+  - ConcretePrototype: Prototypeを具体的に実装するもの
+  - Client: ConcretePrototypeを使うもの
+- どんないいことがある？
+  - 純粋にインスタンスのコピーができる
+  - クラス名を指定せずインスタンスを生成する手段がある  
+  クラス名による束縛・密結合を避けることができる。
