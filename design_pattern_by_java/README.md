@@ -8,11 +8,11 @@
 | 著者     | 結城浩                             |
 | 発行日   | 2013.09.10                         |
 
-## Memo
+## Foreword
 
 - デザインパターンはクラスの再利用化を促進するもの
 
-### Iterator
+## Iterator
 
 - 要素の集合をひとつひとつ簡単に取り出せるパターン
 - 登場人物
@@ -25,7 +25,7 @@
 - この構成にすることで、for/whileの書き方が Aggregateの実装に依存しない  
 Aggregateの変更に強くなる。
 
-### Adapter
+## Adapter
 
 - 間を取り持つもの  
 すでに提供されているものを必要なものに変換する。
@@ -34,7 +34,7 @@ Aggregateの変更に強くなる。
   - 継承を使ったもの
   - 委譲を使ったもの
 
-#### 継承を使ったもの
+### 継承を使ったもの
 
 実装のモチベーション、流れは以下の通り。
 
@@ -44,7 +44,7 @@ Aggregateの変更に強くなる。
 4. そこで、クラスAを継承しつつインタフェースBを実装した新たなクラスCを定義する
 5. これで、既存の処理を流用しつつ好きな使い方ができる
 
-#### 委譲を使ったもの
+### 委譲を使ったもの
 
 継承を使ったものでは、自分の欲しい処理がインタフェースBで定義されていた。  
 しかし、委譲を使ったものではそれが抽象クラスBとして定義されている。  
@@ -58,7 +58,7 @@ Aggregateの変更に強くなる。
 4. そこで、クラスBを継承しつつ中ではインスタンスAの処理を呼び出すだけのクラスを定義し、それをクラスCとする
 5. これで、既存の処理を流用しつつ好きな使い方ができる
 
-#### Adapterのまとめ
+### Adapterのまとめ
 
 - 登場人物
   - Target: いま必要なメソッドを定めるもの
@@ -72,7 +72,7 @@ Aggregateの変更に強くなる。
   - 互換性をもたせるのに有用
   - 動くコードがなくとも入出力の仕様だけで実装を進めることができる
 
-### Template Method
+## Template Method
 - Abstractによって処理の流れ (テンプレートメソッド) だけを定義し、詳細の実装はサブクラスに任せる
 - 登場人物
   - AbstractClass: 抽象メソッドを宣言し、テンプレートを表す  
@@ -82,7 +82,7 @@ Aggregateの変更に強くなる。
 - どんないいことがある？
   - 処理の概念を統一できる
 
-#### サンプルコード
+### サンプルコード
 
 ```java
 public abstract class AbstractDisplay {
@@ -113,7 +113,7 @@ public class CharDisplay extends AbstractDisplay {
 }
 ```
 
-### Factory Method
+## Factory Method
 
 - Template Methodと似ている
 - インスタンス生成の方法を統一しつつ、詳細な実装はサブクラスに委ねる
@@ -123,7 +123,7 @@ public class CharDisplay extends AbstractDisplay {
   - ConcreteProduct: Productの中身を実装するもの
   - ConcreteCreator: Creatorの中身を実装するもの
 
-#### サンプルコード
+### サンプルコード
 
 フレームワーク側:
 
@@ -176,7 +176,7 @@ public class IDCardFactory extends Factory {
 }
 ```
 
-#### Factory Methodのまとめ
+### Factory Methodのまとめ
 
 - どんないいことがある？
   - どんなサブクラスを定義しようとも、Productを作るときの書き方がクラス名に依存しない  
