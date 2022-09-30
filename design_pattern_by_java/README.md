@@ -326,3 +326,116 @@ public class Main {
   Builderを簡単に交換して使いまわせるということ。
   - Client: Builderパターンを利用する  
   つまり、ConcreteBuilderと Directorを利用することになる。
+
+## Abstract Factory
+
+- abstractな部品を組み合わせて abstractな製品を作る
+
+### サンプルコード
+
+目的の出力:
+
+```html
+<html><head><title>LinkPage</title></head>
+<body>
+<h1>LinkPage</h1>
+<ul>
+<li>
+新聞
+<ul>
+  <li><a href="https://www.asahi.com/">朝日新聞</a></li>
+  <li><a gref="https://www.yomiuri.co.jp/">読売新聞</a></li>
+</ul>
+</li>
+<li>
+Yahoo!
+<ul>
+  <li><a href="https://yahoo.com/">Yahoo!</a></li>
+  <li><a href="https://yahoo.co.jp/">Yahoo!Japan</a></li>
+</ul>
+</li>
+  <li><a href="https://excite.com/">Excite</a></li>
+  <li><a href="https://google.com/">Google</a></li>
+</ul>
+</li>
+</ul>
+<hr><address>結城 浩</address></body></html>
+```
+
+factoryパッケージ (抽象的な工場・部品・製品を含むパッケージ):
+
+```java
+package factory;
+import java.io.*;
+import java.util.ArrayList;
+
+public abstract class Item {
+    protected String caption;
+    public Item(String caption) {
+        this.caption = caption;
+    }
+    public abstract String makeHTML();
+}
+
+public abstract class Link extends Item {
+    protected String url;
+    public Link(String caption, String url) {
+        super(caption);
+        this.url = url;
+    }
+    // makeHTMLを実装していないから abstract
+}
+
+public abstract class Tray extends Item {
+    protected ArrayList tray = new ArrayList();
+    public Tray(String caption) {
+        super(caption);
+    }
+    public void add(Item item) {
+        tray.add(item)
+    }
+}
+
+public abstract class Page {
+    protected String title;
+    protected String author;
+    protected ArrayList content = new ArrayList();
+    public Page(String title, String author) {
+        this.title = title;
+        this.author = author;
+    }
+    public void add(Item item) {
+        content.add(item);
+    }
+    public void output() {
+        try {
+            String filename = title + ".html";
+            Writer writer = new FileWriter(filename);
+            writer.write(this.makeHTML());
+            writer.close();
+            System.out.println(filename + " を作成しました");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public abstract String makeHTML();
+}
+// ここまでが部品
+
+public abstract class Factory {
+    public static Factory getFactory(String classname) {
+        Factory factory = null;
+        try {
+            factory = (Factory)Class.forName(classname).newInstance();
+        } catch (ClassNotFoundException e) {
+            System.err.println("クラス " + classname + "が見つかりません");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return factory;
+    }
+    public abstract Link createLink(String caption, String url);
+    public abstract Tray createTray(String caption);
+    public abstract Page createPage(String title, String author);
+}
+```
