@@ -331,7 +331,7 @@ public class Main {
 
 - abstractな部品を組み合わせて abstractな製品を作る
 
-### サンプルコード
+### サンプルコード 1
 
 目的の出力:
 
@@ -480,6 +480,77 @@ public class Main {
         page.add(traynews);
         page.add(traysearch);
         page.output();
+    }
+}
+```
+
+listfactoryパッケージ (具体的な工場・部品・製品を含むパッケージ):
+
+```java
+package listfactory;
+import factory.*;
+import java.util.Iterator;
+
+public class ListFactory extends Factory {
+    public Link createLink(String caption, String url) {
+        return new ListLink(caption, url);
+    }
+    public Tray createTray(String caption) {
+        return new ListTray(caption);
+    }
+    public Page createPage(String title, String author) {
+        return new ListPage(title, author);
+    }
+}
+
+public class ListLink extends Link {
+    public ListLink(String caption, String url) {
+        super(caption, url);
+    }
+    public String makeHTML() {
+        return "  <li><a href=\"" + url + "\">" + caption + "</a></li>\n";
+    }
+
+    public class ListTray extends Tray {
+        public ListTray(String  caption) {
+            super(caption);
+        }
+        public String makeHTML() {
+            StringBuffer buffer = new StringBuffer();
+            buffer.append("<li>\n");
+            buffer.append(caption + "\n");
+            buffer.append("<ul>\n");
+            Iterator it = tray.iterator();
+            while (it.hasNext()) {
+                Item item = (Item)it.next();
+                buffer.append(item.makeHTML());
+            }
+            buffer.append("</ul>\n");
+            buffer.append("</li>\n");
+            return buffer.toString();
+        }
+    }
+
+    public class ListPage extends Page {
+        public ListPage(String title, String author) {
+            super(title, author);
+        }
+        public String makeHTML() {
+            StringBuffer buffer = new StringBuffer();
+            buffer.append("<html><head><title>" + title + "</title></head>\n");
+            buffer.append("<body>\n");
+            buffer.append("<h1>" + title + "</h1>\n");
+            buffer.append("<ul>\n");
+            Iterator it = content.iterator();
+            while (it.hasNext()) {
+                Item item = it.next();
+                buffer.append(item.makeHTML());
+            }
+            buffer.append("</ul>\n");
+            buffer.append("<hr><address>" + author + "</address>");
+            buffer.append("</body></html>\n");
+            return buffer.toString();
+        }
     }
 }
 ```
