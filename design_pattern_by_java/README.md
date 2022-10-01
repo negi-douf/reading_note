@@ -541,7 +541,7 @@ public class ListLink extends Link {
             buffer.append("<body>\n");
             buffer.append("<h1>" + title + "</h1>\n");
             buffer.append("<ul>\n");
-            Iterator it = content.iterator();
+            Iterator it = content.iterator();  // 継承したフィールド
             while (it.hasNext()) {
                 Item item = it.next();
                 buffer.append(item.makeHTML());
@@ -551,6 +551,79 @@ public class ListLink extends Link {
             buffer.append("</body></html>\n");
             return buffer.toString();
         }
+    }
+}
+```
+
+tablefactoryパッケージ (具体的な工場・部品・製品を含むパッケージ):
+
+```java
+package tablefactory;
+import factory.*;
+import java.util.iterator;
+
+public class TableFactory extends Factory {
+    public link createLink(String caption, String url) {
+        return new TableLink(caption, url);
+    }
+    public Tray createTray(String caption) {
+        return new TableTray(caption);
+    }
+    public Page createPage(String title, String author) {
+        return new TablePage(title, author);
+    }
+}
+
+public class TableLink extends Link {
+    public TableLink(String caption, String url) {
+        super(caption, url);
+    }
+    public String makeHTML() {
+        return "<td><a href=\"" + url + "\">" + caption + "</a></td>\n";
+    }
+}
+
+public class TableTray extends Tray {
+    public TableTray(String caption) {
+        super(caption);
+    }
+    public String makeHTML() {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<td>");
+        buffer.append("<table width=\"100%\" border=\"1\"><tr>");
+        buffer.append("<td bgcolor=\"#cccccc\" align=\"center\" colspan=\"" + tray.site() + "\"><b>" + caption + "</b></td>");
+        buffer.append("</tr>\n");
+        buffer.append("<tr>\n");
+        Iterator it = tray.iterator();
+        while (it.hasNext()) {
+            Item item = (Item)it.next();
+            buffer.append(item.makeHTML());
+        }
+        buffer.append("</tr></table>");
+        buffer.append("</td>");
+        return buffer.toString();
+    }
+}
+
+public class TablePage extends Page {
+    public TablePage(String title, String author) {
+        super(title, author);
+    }
+    public String makeHTML() {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<html><head><title>" + title + "</title></head>\n");
+        buffer.append("<body>\n");
+        buffer.append("<h1>" + title + "</h1>\n");
+        buffer.append("<table width=\"80%\" border=\"3\">\n");
+        Iterator it = content.iterator();
+        while (it.hasNext()) {
+            Item item = (Item)it.next();
+            buffer.append("<tr>" + item.makeHTML() + "</tr>");
+        }
+        buffer.append("</table>\n");
+        buffer.append("<hr><address>" + author + "</address>");
+        buffer.append("</body></html>\n");
+        return buffer.toString();
     }
 }
 ```
