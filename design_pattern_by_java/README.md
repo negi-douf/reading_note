@@ -627,3 +627,15 @@ public class TablePage extends Page {
     }
 }
 ```
+
+### Abstract Factoryのまとめ
+
+- 登場人物
+  - AbstractProduct: 抽象的な部品・製品のインタフェースを定める
+  - AbstractFactory: AbstractProductのインスタンスを作るためのインタフェースを定める
+  - Client: AbstractFactoryと AbstractProductのインタフェースを使って仕事をする
+  - ConcreteProduct: AbstractProductのインタフェースを実装する
+  - ConcreteFactory: AbstractFactoryのインタフェースを実装する
+- 新たな工場を追加しても、Client側を変える必要がない
+- 部品の種類を追加するのは大変
+- 使う側は「どのセットか」のみを意識していて、「どの部品を組み合わせるか」を知らなくても使える
