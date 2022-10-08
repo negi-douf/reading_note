@@ -747,3 +747,18 @@ public class Main {
     }
 }
 ```
+
+### Bridgeのまとめ
+
+- 登場人物
+  - Abstraction: 機能の階層の最上位クラス  
+  Implementorのメソッドを使った基本的な機能を定義する。
+  - RefinedAbstraction: Abstractionに機能を追加したもの
+  - Implementor: 実装の階層の最上位クラス  
+  Abstractionのために実装すべきインタフェースを規定する。  
+  ここではまだ実装しない。
+  - ConcreteImplementor: Implementorの定めたインタフェースを実装する
+- どんないいことがある？
+  - 階層を分けたことで、機能を追加するとき、必ずしも実装の変更は必要ない  
+  元からある実装の組み合わせで作れるのであれば、Implementorの使い方を変えるだけでいい。
+- たとえば、OSごとの共通インタフェースを Implementorで定義して、それを継承して実装するとか
