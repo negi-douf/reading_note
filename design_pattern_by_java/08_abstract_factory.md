@@ -1,8 +1,8 @@
-## Abstract Factory
+# Abstract Factory
 
 - abstractな部品を組み合わせて abstractな製品を作る
 
-### サンプルコード 1
+## サンプルコード 1
 
 目的の出力:
 
