@@ -1,4 +1,4 @@
-## Factory Method
+# Factory Method
 
 - Template Methodと似ている
 - インスタンス生成の方法を統一しつつ、詳細な実装はサブクラスに委ねる
@@ -8,7 +8,7 @@
   - ConcreteProduct: Productの中身を実装するもの
   - ConcreteCreator: Creatorの中身を実装するもの
 
-### サンプルコード
+## サンプルコード
 
 フレームワーク側:
 
@@ -61,7 +61,7 @@ public class IDCardFactory extends Factory {
 }
 ```
 
-### Factory Methodのまとめ
+## Factory Methodのまとめ
 
 - どんないいことがある？
   - どんなサブクラスを定義しようとも、Productを作るときの書き方がクラス名に依存しない  

@@ -1,4 +1,4 @@
-## Template Method
+# Template Method
 
 - Abstractによって処理の流れ (テンプレートメソッド) だけを定義し、詳細の実装はサブクラスに任せる
 - 登場人物
@@ -9,7 +9,7 @@
 - どんないいことがある？
   - 処理の概念を統一できる
 
-### サンプルコード
+## サンプルコード
 
 ```java
 public abstract class AbstractDisplay {
